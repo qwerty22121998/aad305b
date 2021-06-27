@@ -4,7 +4,7 @@ import "Common"
 import QtQml 2.2
 
 Item {
-    width: 1920
+    width: parent.width
     height: 104
     signal bntBackClicked
     property bool isShowBackBtn: false
@@ -19,50 +19,70 @@ Item {
         visible: isShowBackBtn
     }
 
-    Item {
-        id: clockArea
-        x: 660
-        width: 300
+    RowLayout {
+        width: parent.width
         height: parent.height
-        Image {
-            anchors.left: parent.left
-            height: 104
-            source: "qrc:/Img/StatusBar/status_divider.png"
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
         }
-        Text {
-            id: clockTime
-            text: "10:28"
-            color: "white"
-            font.pixelSize: 72
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            anchors.centerIn: parent
+
+        Item {
+            Layout.fillWidth: true
         }
-        Image {
-            anchors.right: parent.right
-            height: 104
-            source: "qrc:/Img/StatusBar/status_divider.png"
+
+        Item {
+            id: clockArea
+            Layout.fillWidth:  true
+//            x: 660
+//            width: 300
+            height: parent.height
+            Image {
+                anchors.left: parent.left
+                height: 104
+                source: "qrc:/Img/StatusBar/status_divider.png"
+            }
+            Text {
+                id: clockTime
+                text: "10:28"
+                color: "white"
+                font.pixelSize: 72
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                anchors.centerIn: parent
+            }
+            Image {
+                anchors.right: parent.right
+                height: 104
+                source: "qrc:/Img/StatusBar/status_divider.png"
+            }
         }
-    }
-    Item {
-        id: dayArea
-        anchors.left: clockArea.right
-        width: 300
-        height: parent.height
-        Text {
-            id: day
-            text: "Jun. 24"
-            color: "white"
-            font.pixelSize: 72
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            anchors.centerIn: parent
+        Item {
+            id: dayArea
+            Layout.fillWidth: true
+//            anchors.left: clockArea.right
+//            width: 300
+            height: parent.height
+            Text {
+                id: day
+                text: "Jun. 24"
+                color: "white"
+                font.pixelSize: 72
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                anchors.centerIn: parent
+            }
+            Image {
+                anchors.right: parent.right
+                height: 104
+                source: "qrc:/Img/StatusBar/status_divider.png"
+            }
         }
-        Image {
-            anchors.right: parent.right
-            height: 104
-            source: "qrc:/Img/StatusBar/status_divider.png"
+        Item {
+            Layout.fillWidth: true
         }
+
     }
 
     QtObject {

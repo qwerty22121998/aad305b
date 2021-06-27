@@ -5,24 +5,23 @@ import QtQuick.Controls 2.4
 ApplicationWindow {
     id: window
     visible: true
-    width: 1920
-    height: 1200
+    width: 1280
+    height: 720
     Image {
         id: background
-        width: 1920
-        height: 1200
+        anchors.fill: parent
         source: "qrc:/Img/bg_full.png"
     }
 
     StatusBar {
         id: statusBar
         onBntBackClicked: stackView.pop()
-        isShowBackBtn: stackView.depth == 1 ? false : true
+        isShowBackBtn: stackView.depth == 1
     }
 
     StackView {
         id: stackView
-        width: 1920
+        width: parent.width
         anchors.top: statusBar.bottom
         initialItem: HomeWidget{}
         onCurrentItemChanged: {
@@ -31,7 +30,7 @@ ApplicationWindow {
         pushExit: Transition {
             XAnimator {
                 from: 0
-                to: -1920
+                to: -Fparent.width
                 duration: 200
                 easing.type: Easing.OutCubic
             }

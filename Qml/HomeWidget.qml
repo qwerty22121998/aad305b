@@ -2,11 +2,12 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.4
 import QtQml.Models 2.1
+import QtQml 2.3
 
 Item {
     id: root
-    width: 1920
-    height: 1096
+    width: parent.width
+    height: parent.height
     function openApplication(url){
         parent.push(url)
     }
