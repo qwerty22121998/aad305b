@@ -34,9 +34,7 @@ Item {
 
         Item {
             id: clockArea
-            Layout.fillWidth:  true
-//            x: 660
-//            width: 300
+            Layout.fillWidth: true
             height: parent.height
             Image {
                 anchors.left: parent.left
@@ -61,8 +59,6 @@ Item {
         Item {
             id: dayArea
             Layout.fillWidth: true
-//            anchors.left: clockArea.right
-//            width: 300
             height: parent.height
             Text {
                 id: day
@@ -82,7 +78,6 @@ Item {
         Item {
             Layout.fillWidth: true
         }
-
     }
 
     QtObject {
@@ -91,21 +86,20 @@ Item {
         property date currentTime: new Date()
 
         Component.onCompleted: {
-            clockTime.text = currentTime.toLocaleTimeString(locale, "hh:mm");
-            day.text = currentTime.toLocaleDateString(locale, "MMM. dd");
+            clockTime.text = currentTime.toLocaleTimeString(locale, "hh:mm")
+            day.text = currentTime.toLocaleDateString(locale, "MMM. dd")
         }
     }
 
-    Timer{
+    Timer {
         interval: 1000
         repeat: true
         running: true
         onTriggered: {
             time.currentTime = new Date()
-            clockTime.text = time.currentTime.toLocaleTimeString(locale, "hh:mm");
-            day.text = time.currentTime.toLocaleDateString(locale, "MMM. dd");
+            clockTime.text = time.currentTime.toLocaleTimeString(locale,
+                                                                 "hh:mm")
+            day.text = time.currentTime.toLocaleDateString(locale, "MMM. dd")
         }
-
     }
-
 }
