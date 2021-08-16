@@ -1,53 +1,58 @@
+#include <QDebug>
 #include <QGuiApplication>
-#include <QScreen>
-#include <QQmlApplicationEngine>
 #include <QMediaPlaylist>
-#include "App/Media/player.h"
+#include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "App/Media/playlistmodel.h"
+#include <QScreen>
+
 #include "App/Climate/climatemodel.h"
+#include "App/Media/player.h"
+#include "App/Media/playlistmodel.h"
+#include "appconfig.h"
 #include "applicationsmodel.h"
 #include "xmlreader.h"
-#include "appconfig.h"
+#include "xmlwriter.h"
 
-#include <QDebug>
+int main(int argc, char *argv[]) {
+  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  qRegisterMetaType<QMediaPlaylist *>("QMediaPlaylist*");
 
+  QGuiApplication app(argc, argv);
 
-int main(int argc, char *argv[])
-{
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    qRegisterMetaType<QMediaPlaylist*>("QMediaPlaylist*");
+  QQmlApplicationEngine engine;
 
-    QGuiApplication app(argc, argv);
+  ApplicationsModel appsModel;
+  XmlReader *xmlReader = new XmlReader("applications.xml", appsModel);
 
-    QQmlApplicationEngine engine;
+  XmlWriter *xmlWriter = new XmlWriter();
+  xmlWriter->BindXml("applications.xml", &appsModel);
+  engine.rootContext()->setContextProperty("xmlReader", xmlReader);
+  engine.rootContext()->setContextProperty("xmlWriter", xmlWriter);
+  engine.rootContext()->setContextProperty("appsModel", &appsModel);
 
-    ApplicationsModel appsModel;
-    XmlReader xmlReader("applications.xml", appsModel);
-    engine.rootContext()->setContextProperty("appsModel", &appsModel);
+  Player *player = new Player();
+  engine.rootContext()->setContextProperty("myModel", player->m_playlistModel);
+  engine.rootContext()->setContextProperty("player", player->m_player);
+  engine.rootContext()->setContextProperty("utility", player);
 
-    Player *player = new Player();
-    engine.rootContext()->setContextProperty("myModel",player->m_playlistModel);
-    engine.rootContext()->setContextProperty("player",player->m_player);
-    engine.rootContext()->setContextProperty("utility",player);
+  ClimateModel *climate = new ClimateModel();
+  engine.rootContext()->setContextProperty("climateModel", climate);
 
-    ClimateModel *climate = new ClimateModel();
-    engine.rootContext()->setContextProperty("climateModel",climate);
+  AppConfig *config = new AppConfig(app.primaryScreen()->size());
+  engine.rootContext()->setContextProperty("appConfig", config);
 
-    AppConfig *config = new AppConfig(app.primaryScreen()->size());
-    engine.rootContext()->setContextProperty("appConfig", config);
+  qDebug() << config->getWRatio() << " " << config->getHRatio() << Qt::endl;
 
-    qDebug() << config->getWRatio() << " " << config->getHRatio() << Qt::endl;
+  const QUrl url(QStringLiteral("qrc:/Qml/main.qml"));
+  QObject::connect(
+      &engine, &QQmlApplicationEngine::objectCreated, &app,
+      [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl) QCoreApplication::exit(-1);
+      },
+      Qt::QueuedConnection);
+  engine.load(url);
+  // notify signal to QML read data from dbus
+  emit climate->dataChanged();
 
-    const QUrl url(QStringLiteral("qrc:/Qml/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
-    engine.load(url);
-    //notify signal to QML read data from dbus
-    emit climate->dataChanged();
-
-    return app.exec();
+  return app.exec();
 }

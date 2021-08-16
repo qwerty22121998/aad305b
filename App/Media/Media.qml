@@ -8,7 +8,7 @@ Item {
     AppHeader {
         id: headerItem
         width: parent.width
-        height: 141 * appConfig.h_ratio
+        height: 70 * appConfig.h_ratio
         playlistButtonStatus: playlist.opened ? 1 : 0
         onClickPlaylistButton: {
             if (!playlist.opened) {
@@ -22,7 +22,7 @@ Item {
     //Playlist
     PlaylistView {
         id: playlist
-        y: (141 + 104) * appConfig.h_ratio
+        y: (70 + 104) * appConfig.h_ratio
         width: 675 * appConfig.w_ratio
         height: parent.height - headerItem.height
     }

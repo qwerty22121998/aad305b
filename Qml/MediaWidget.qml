@@ -8,7 +8,7 @@ MouseArea {
     Rectangle {
         anchors {
             fill: parent
-            margins: 10
+            margins: 10 * appConfig.h_ratio
         }
         opacity: 0.7
         color: "#111419"
@@ -103,7 +103,7 @@ MouseArea {
         id: imgDuration
         x: 62 * appConfig.w_ratio
         y: (56 + 343 + 55 + 62) * appConfig.h_ratio
-        width: 511
+        width: 511 * appConfig.w_ratio
         source: "qrc:/Img/HomeScreen/widget_media_pg_n.png"
     }
     Image {

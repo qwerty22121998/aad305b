@@ -6,6 +6,7 @@ DBUS_INTERFACES += Dbus/climate.xml
 # depend on your compiler). Refer to the documentation for the
 # deprecated API to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += PROJECT_PATH=\"\\\"$${_PRO_FILE_PWD_}/\\\"\"
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -19,7 +20,8 @@ SOURCES += \
         appconfig.cpp \
         applicationsmodel.cpp \
         main.cpp \
-        xmlreader.cpp
+        xmlreader.cpp \
+        xmlwriter.cpp
 
 RESOURCES += qml.qrc
 
@@ -41,7 +43,8 @@ HEADERS += \
     App/Media/playlistmodel.h \
     appconfig.h \
     applicationsmodel.h \
-    xmlreader.h
+    xmlreader.h \
+    xmlwriter.h
 
 LIBS += -ltag
 

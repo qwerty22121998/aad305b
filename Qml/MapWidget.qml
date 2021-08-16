@@ -16,12 +16,14 @@ MouseArea {
         opacity: 0.7
         color: "#111419"
     }
+
     Item {
         id: map
         x: 10 * appConfig.w_ratio
         y: 10 * appConfig.h_ratio
         width: 615 * appConfig.w_ratio
         height: 550 * appConfig.h_ratio
+
         Plugin {
             id: mapPlugin
             name: "mapboxgl" //"osm" // , "esri", ...
@@ -55,6 +57,14 @@ MouseArea {
         width: root.width
         height: root.height
         source: ""
+    }
+    Text {
+        id: title
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 40 * appConfig.h_ratio
+        text: "Navigation"
+        color: "white"
+        font.pixelSize: 34 * appConfig.h_ratio
     }
 
     states: [

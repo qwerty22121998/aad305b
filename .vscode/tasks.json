@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Qmake",
+      "type": "shell",
+      "command": "/home/vuhk/Qt/5.15.2/gcc_64/bin/qmake HomeScreen.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug && /usr/bin/make qmake_all",
+      "options": {
+        "cwd": "."
+      }
+    },
+    {
+      "label": "make",
+      "type": "shell",
+      "command": "make -j12 && ./HomeScreen",
+      "options": {
+        "cwd": "build"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

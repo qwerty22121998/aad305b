@@ -1,11 +1,10 @@
 ndef CONFIG_H
 #define CONFIG_H
 
-
 #include <QObject>
 #include <QSize>
 
-struct ScreenSize {
+    struct ScreenSize {
   QSize default_size;
   QSize device_size;
 };
@@ -27,4 +26,4 @@ class Config : public QObject {
   ScreenSize screen_size;
 };
 
-#endif // CONFIG_H
+#endif  // CONFIG_H

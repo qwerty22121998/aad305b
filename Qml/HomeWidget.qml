@@ -128,91 +128,130 @@ Item {
         }
     }
 
-    ListView {
+    ScrollView {
+        id: scrollApps
         x: 0
         y: 570 * appConfig.h_ratio
         width: 1920 * appConfig.w_ratio
         height: 604 * appConfig.h_ratio
-        orientation: ListView.Horizontal
-        interactive: false
-        spacing: 5 * appConfig.w_ratio
 
-        displaced: Transition {
-            NumberAnimation {
-                properties: "x,y"
-                easing.type: Easing.OutQuad
+        ScrollBar.horizontal: ScrollBar {
+            id: sbApps
+            anchors.top: lvApps.top
+            policy: (lvApps.count > 6) ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+            size: scrollApps.width / lvApps.width
+            contentItem: Rectangle {
+                implicitWidth: 1920 * appConfig.w_ratio
+                implicitHeight: 10 * appConfig.h_ratio
+                radius: height / 2
             }
         }
 
-        model: DelegateModel {
-            id: visualModel
-            model: appsModel
-            delegate: DropArea {
-                id: delegateRoot
-                width: 316 * appConfig.w_ratio
-                height: 604 * appConfig.h_ratio
-                keys: "AppButton"
+        ListView {
+            id: lvApps
 
-                onEntered: visualModel.items.move(drag.source.visualIndex,
-                                                  icon.visualIndex)
-                property int visualIndex: DelegateModel.itemsIndex
-                Binding {
-                    target: icon
-                    property: "visualIndex"
-                    value: visualIndex
+            width: 1920 * appConfig.w_ratio
+            height: 604 * appConfig.h_ratio
+            orientation: ListView.Horizontal
+            interactive: sbApps.visible
+            spacing: 5 * appConfig.w_ratio
+
+            ScrollBar.horizontal: sbApps
+
+            displaced: Transition {
+                NumberAnimation {
+                    properties: "x,y"
+                    easing.type: Easing.OutQuad
                 }
+            }
 
-                Item {
-                    id: icon
-                    property int visualIndex: 0
+            model: DelegateModel {
+                id: visualModel
+                model: appsModel
+                delegate: DropArea {
+                    id: delegateRoot
                     width: 316 * appConfig.w_ratio
                     height: 604 * appConfig.h_ratio
-                    anchors {
-                        horizontalCenter: parent.horizontalCenter
-                        verticalCenter: parent.verticalCenter
+                    keys: "AppButton"
+
+                    onEntered: {
+                        visualModel.items.move(drag.source.visualIndex,
+                                               icon.visualIndex)
+                        appsModel.move(drag.source.visualIndex,
+                                       icon.visualIndex)
+                        xmlWriter.saveXml()
                     }
 
-                    AppButton {
-                        id: app
-                        anchors.fill: parent
-                        title: model.title
-                        icon: model.iconPath
-                        onClicked: openApplication(model.url, {
-                                                       "appTitle": model.title,
-                                                       "image": model.iconPath + "_n.png"
-                                                   })
-                        onReleased: {
-                            app.focus = true
-                            app.state = "Focus"
-                            for (var index = 0; index < visualModel.items.count; index++) {
-                                if (index !== icon.visualIndex)
-                                    visualModel.items.get(index).focus = false
-                                else
-                                    visualModel.items.get(index).focus = true
-                            }
-                        }
+                    property int visualIndex: DelegateModel.itemsIndex
+                    Binding {
+                        target: icon
+                        property: "visualIndex"
+                        value: visualIndex
                     }
 
-                    onFocusChanged: app.focus = icon.focus
+                    Item {
+                        id: icon
+                        property int visualIndex: 0
+                        width: 316 * appConfig.w_ratio
+                        height: 604 * appConfig.h_ratio
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            verticalCenter: parent.verticalCenter
+                        }
 
-                    Drag.active: app.drag.active
-                    Drag.keys: "AppButton"
+                        AppButton {
+                            id: app
+                            anchors.fill: parent
+                            title: model.title
+                            icon: model.iconPath
+                            onClicked: openApplication(model.url, {
+                                                           "appTitle": model.title,
+                                                           "image": model.iconPath + "_n.png"
+                                                       })
+                            drag.axis: Drag.XAndYAxis
+                            drag.target: icon
 
-                    states: [
-                        State {
-                            when: icon.Drag.active
-                            ParentChange {
-                                target: icon
-                                parent: root
+                            onPressAndHold: {
+
                             }
 
-                            AnchorChanges {
-                                target: icon
-                                anchors.horizontalCenter: undefined
-                                anchors.verticalCenter: undefined
+                            onReleased: {
+                                app.focus = true
+                                app.state = "Focus"
+                                for (var index = 0; index < visualModel.items.count; index++) {
+                                    if (index !== icon.visualIndex)
+                                        visualModel.items.get(
+                                                    index).focus = false
+                                    else
+                                        visualModel.items.get(
+                                                    index).focus = true
+                                }
                             }
                         }
-                    ]
+
+                        onFocusChanged: app.focus = icon.focus
+
+                        Drag.active: app.drag.active
+                        Drag.hotSpot.x: delegateRoot.width / 2
+                        Drag.hotSpot.y: delegateRoot.height / 2
+                        Drag.keys: "AppButton"
+
+                        states: [
+                            State {
+                                when: icon.Drag.active
+                                ParentChange {
+                                    target: icon
+                                    parent: scrollApps
+                                }
+
+                                AnchorChanges {
+                                    target: icon
+                                    anchors.horizontalCenter: undefined
+                                    anchors.verticalCenter: undefined
+                                }
+                            }
+                        ]
+                    }
                 }
             }
         }

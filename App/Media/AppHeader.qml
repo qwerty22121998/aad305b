@@ -6,6 +6,7 @@ Item {
     Image {
         id: headerItem
         source: "qrc:/App/Media/Image/title.png"
+        height: parent.height
         SwitchButton {
             id: playlist_button
             anchors.left: parent.left
