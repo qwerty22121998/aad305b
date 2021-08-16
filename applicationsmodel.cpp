@@ -1,5 +1,7 @@
 #include "applicationsmodel.h"
 
+#include <QKeySequence>
+
 ApplicationItem::ApplicationItem(QString title, QString url, QString iconPath)
 {
     m_title = title;
@@ -63,4 +65,3 @@ QHash<int, QByteArray> ApplicationsModel::roleNames() const
     roles[IconPathRole] = "iconPath";
     return roles;
 }
-

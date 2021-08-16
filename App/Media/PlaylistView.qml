@@ -25,18 +25,18 @@ Drawer {
             implicitHeight: playlistItem.height
             Image {
                 id: playlistItem
-                width: 675
-                height: 193
+                width: 675 * appConfig.w_ratio
+                height: 193 * appConfig.h_ratio
                 source: "qrc:/App/Media/Image/playlist.png"
                 opacity: 0.5
             }
             Text {
                 text: title
                 anchors.fill: parent
-                anchors.leftMargin: 70
+                anchors.leftMargin: 70 * appConfig.w_ratio
                 verticalAlignment: Text.AlignVCenter
                 color: "white"
-                font.pixelSize: 32
+                font.pixelSize: 32 * appConfig.h_ratio
             }
             onClicked: {
                 player.playlist.currentIndex = index
@@ -53,7 +53,7 @@ Drawer {
             source: "qrc:/App/Media/Image/playlist_item.png"
             Image {
                 anchors.left: parent.left
-                anchors.leftMargin: 15
+                anchors.leftMargin: 15 * appConfig.w_ratio
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/App/Media/Image/playing.png"
             }
@@ -66,10 +66,10 @@ Drawer {
         }
     }
 
-    Connections{
+    Connections {
         target: player.playlist
         onCurrentIndexChanged: {
-            mediaPlaylist.currentIndex = index;
+            mediaPlaylist.currentIndex = index
         }
     }
 }

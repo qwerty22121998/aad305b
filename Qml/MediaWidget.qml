@@ -3,10 +3,10 @@ import QtGraphicalEffects 1.0
 
 MouseArea {
     id: root
-    implicitWidth: 635
-    implicitHeight: 570
+    implicitWidth: 635 * appConfig.w_ratio
+    implicitHeight: 570 * appConfig.h_ratio
     Rectangle {
-        anchors{
+        anchors {
             fill: parent
             margins: 10
         }
@@ -15,13 +15,15 @@ MouseArea {
     }
     Image {
         id: bgBlur
-        x:10
-        y:10
-        width: 615
-        height: 550
+        x: 10 * appConfig.w_ratio
+        y: 10 * appConfig.h_ratio
+        width: 615 * appConfig.w_ratio
+        height: 550 * appConfig.h_ratio
         source: {
-            if (myModel.rowCount() > 0 && myModel.rowCount() >  player.playlist.currentIndex)
-                return myModel.data(myModel.index(player.playlist.currentIndex,0), 260)
+            if (myModel.rowCount() > 0 && myModel.rowCount(
+                        ) > player.playlist.currentIndex)
+                return myModel.data(myModel.index(player.playlist.currentIndex,
+                                                  0), 260)
             else
                 return "qrc:/Img/HomeScreen/cover_art.jpg"
         }
@@ -40,68 +42,74 @@ MouseArea {
     Text {
         id: title
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 40
+        y: 40 * appConfig.h_ratio
         text: "USB Music"
         color: "white"
-        font.pixelSize: 34
+        font.pixelSize: 34 * appConfig.h_ratio
     }
     Image {
         id: bgInner
-        x:201
-        y:119
-        width: 258
-        height: 258
+        x: 201 * appConfig.w_ratio
+        y: 119 * appConfig.h_ratio
+        width: 258 * appConfig.w_ratio
+        height: 258 * appConfig.h_ratio
         source: {
-            if (myModel.rowCount() > 0 && myModel.rowCount() >  player.playlist.currentIndex)
-                return myModel.data(myModel.index(player.playlist.currentIndex,0), 260)
+            if (myModel.rowCount() > 0 && myModel.rowCount(
+                        ) > player.playlist.currentIndex)
+                return myModel.data(myModel.index(player.playlist.currentIndex,
+                                                  0), 260)
             else
                 return "qrc:/Img/HomeScreen/cover_art.jpg"
         }
     }
-    Image{
-        x:201
-        y:119
-        width: 258
-        height: 258
+    Image {
+        x: 201 * appConfig.w_ratio
+        y: 119 * appConfig.h_ratio
+        width: 258 * appConfig.w_ratio
+        height: 258 * appConfig.h_ratio
         source: "qrc:/Img/HomeScreen/widget_media_album_bg.png"
     }
     Text {
         id: txtSinger
-        x: 42
-        y: (56+343)
-        width: 551
+        x: 42 * appConfig.w_ratio
+        y: (56 + 343) * appConfig.h_ratio
+        width: 551 * appConfig.w_ratio
         horizontalAlignment: Text.AlignHCenter
         text: {
-            if (myModel.rowCount() > 0 && myModel.rowCount() >  player.playlist.currentIndex)
-                return myModel.data(myModel.index(player.playlist.currentIndex,0), 258)
+            if (myModel.rowCount() > 0 && myModel.rowCount(
+                        ) > player.playlist.currentIndex)
+                return myModel.data(myModel.index(player.playlist.currentIndex,
+                                                  0), 258)
         }
         color: "white"
-        font.pixelSize: 30
+        font.pixelSize: 30 * appConfig.h_ratio
     }
     Text {
         id: txtTitle
-        x: 42
-        y: (56+343+55)
-        width: 551
+        x: 42 * appConfig.w_ratio
+        y: (56 + 343 + 55) * appConfig.h_ratio
+        width: 551 * appConfig.w_ratio
         horizontalAlignment: Text.AlignHCenter
         text: {
-            if (myModel.rowCount() > 0 && myModel.rowCount() >  player.playlist.currentIndex)
-                return myModel.data(myModel.index(player.playlist.currentIndex,0), 257)
+            if (myModel.rowCount() > 0 && myModel.rowCount(
+                        ) > player.playlist.currentIndex)
+                return myModel.data(myModel.index(player.playlist.currentIndex,
+                                                  0), 257)
         }
         color: "white"
-        font.pixelSize: 48
+        font.pixelSize: 48 * appConfig.h_ratio
     }
-    Image{
+    Image {
         id: imgDuration
-        x: 62
-        y: (56+343+55+62)
+        x: 62 * appConfig.w_ratio
+        y: (56 + 343 + 55 + 62) * appConfig.h_ratio
         width: 511
         source: "qrc:/Img/HomeScreen/widget_media_pg_n.png"
     }
-    Image{
+    Image {
         id: imgPosition
-        x: 62
-        y: (56+343+55+62)
+        x: 62 * appConfig.w_ratio
+        y: (56 + 343 + 55 + 62) * appConfig.h_ratio
         width: 0
         source: "qrc:/Img/HomeScreen/widget_media_pg_s.png"
     }
@@ -130,36 +138,41 @@ MouseArea {
         }
     ]
     onPressed: root.state = "Pressed"
-    onReleased:{
+    onReleased: {
         root.focus = true
         root.state = "Focus"
     }
     onFocusChanged: {
-        if (root.focus == true )
+        if (root.focus == true)
             root.state = "Focus"
         else
             root.state = "Normal"
     }
 
-    Connections{
+    Connections {
         target: player.playlist
-        onCurrentIndexChanged:{
-            if (myModel.rowCount() > 0 && myModel.rowCount() >  player.playlist.currentIndex) {
-                bgBlur.source = myModel.data(myModel.index(player.playlist.currentIndex,0), 260)
-                bgInner.source = myModel.data(myModel.index(player.playlist.currentIndex,0), 260)
-                txtSinger.text = myModel.data(myModel.index(player.playlist.currentIndex,0), 258)
-                txtTitle.text = myModel.data(myModel.index(player.playlist.currentIndex,0), 257)
+        function onCurrentIndexChanged() {
+            if (myModel.rowCount() > 0 && myModel.rowCount(
+                        ) > player.playlist.currentIndex) {
+                bgBlur.source = myModel.data(
+                            myModel.index(player.playlist.currentIndex, 0), 260)
+                bgInner.source = myModel.data(
+                            myModel.index(player.playlist.currentIndex, 0), 260)
+                txtSinger.text = myModel.data(
+                            myModel.index(player.playlist.currentIndex, 0), 258)
+                txtTitle.text = myModel.data(
+                            myModel.index(player.playlist.currentIndex, 0), 257)
             }
         }
     }
 
-    Connections{
+    Connections {
         target: player
-        onDurationChanged:{
-            imgDuration.width = 511
+        function onDurationChanged() {
+            imgDuration.width = 511 * appConfig.w_ratio
         }
-        onPositionChanged: {
-            imgPosition.width = (player.position / player.duration)*(511);
+        function onPositionChanged() {
+            imgPosition.width = (player.position / player.duration) * (511) * appConfig.w_ratio
         }
     }
 }

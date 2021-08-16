@@ -16,6 +16,7 @@ SOURCES += \
         App/Climate/climatemodel.cpp \
         App/Media/player.cpp \
         App/Media/playlistmodel.cpp \
+        appconfig.cpp \
         applicationsmodel.cpp \
         main.cpp \
         xmlreader.cpp
@@ -34,9 +35,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    App/Climate/climate_interface.h \
     App/Climate/climatemodel.h \
     App/Media/player.h \
     App/Media/playlistmodel.h \
+    appconfig.h \
     applicationsmodel.h \
     xmlreader.h
 

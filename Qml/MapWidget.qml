@@ -1,14 +1,15 @@
 import QtQuick 2.0
 import QtLocation 5.6
 import QtPositioning 5.6
+
 MouseArea {
     id: root
     preventStealing: true
     propagateComposedEvents: true
-    implicitWidth: 635
-    implicitHeight: 570
+    implicitWidth: 635 * appConfig.w_ratio
+    implicitHeight: 570 * appConfig.h_ratio
     Rectangle {
-        anchors{
+        anchors {
             fill: parent
             margins: 10
         }
@@ -17,19 +18,19 @@ MouseArea {
     }
     Item {
         id: map
-        x: 10
-        y: 10
-        width: 615
-        height: 550
+        x: 10 * appConfig.w_ratio
+        y: 10 * appConfig.h_ratio
+        width: 615 * appConfig.w_ratio
+        height: 550 * appConfig.h_ratio
         Plugin {
             id: mapPlugin
             name: "mapboxgl" //"osm" // , "esri", ...
         }
         MapQuickItem {
             id: marker
-            anchorPoint.x: image.width/4
+            anchorPoint.x: image.width / 4
             anchorPoint.y: image.height
-            coordinate: QtPositioning.coordinate(21.03, 105.78)
+            coordinate: QtPositioning.coordinate(20.996857, 105.8664407)
 
             sourceItem: Image {
                 id: image
@@ -40,7 +41,7 @@ MouseArea {
             id: mapView
             anchors.fill: parent
             plugin: mapPlugin
-            center: QtPositioning.coordinate(21.03, 105.78)
+            center: QtPositioning.coordinate(20.996857, 105.8664407)
             zoomLevel: 14
             copyrightsVisible: false
             enabled: false
@@ -80,12 +81,12 @@ MouseArea {
         }
     ]
     onPressed: root.state = "Pressed"
-    onReleased:{
+    onReleased: {
         root.focus = true
         root.state = "Focus"
     }
     onFocusChanged: {
-        if (root.focus == true )
+        if (root.focus == true)
             root.state = "Focus"
         else
             root.state = "Normal"

@@ -182,5 +182,7 @@
         <file>App/Media/MediaInfoControl.qml</file>
         <file>App/Media/PlaylistView.qml</file>
         <file>App/Media/SwitchButton.qml</file>
+        <file>App/Common/CommonApp.qml</file>
+        <file>App/Common/AppHeader.qml</file>
     </qresource>
 </RCC>

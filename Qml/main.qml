@@ -5,8 +5,9 @@ import QtQuick.Controls 2.4
 ApplicationWindow {
     id: window
     visible: true
-    width: 1280
-    height: 720
+    width: 1920 * appConfig.w_ratio
+    height: 1200 * appConfig.h_ratio
+
     Image {
         id: background
         anchors.fill: parent
@@ -16,21 +17,21 @@ ApplicationWindow {
     StatusBar {
         id: statusBar
         onBntBackClicked: stackView.pop()
-        isShowBackBtn: stackView.depth == 1
+        isShowBackBtn: stackView.depth != 1
     }
 
     StackView {
         id: stackView
         width: parent.width
         anchors.top: statusBar.bottom
-        initialItem: HomeWidget{}
+        initialItem: HomeWidget {}
         onCurrentItemChanged: {
             currentItem.forceActiveFocus()
         }
         pushExit: Transition {
             XAnimator {
                 from: 0
-                to: -Fparent.width
+                to: -1920 * appConfig.w_ratio
                 duration: 200
                 easing.type: Easing.OutCubic
             }

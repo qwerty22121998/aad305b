@@ -2,7 +2,7 @@
 #define CLIMATEMODEL_H
 
 #include <QObject>
-#include <climate_interface.h>
+#include "climate_interface.h"
 #include <QDBusConnection>
 
 class ClimateModel : public QObject

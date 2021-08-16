@@ -12,6 +12,8 @@ public:
 
     QString iconPath() const;
 
+    QString key() const;
+
 private:
     QString m_title;
     QString m_url;

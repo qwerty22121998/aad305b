@@ -5,14 +5,14 @@ import QtPositioning 5.6
 
 Item {
     id: root
-    width: 1920
-    height: 1200-70
+    width: 1920 * appConfig.w_ratio
+    height: (1200 - 104) * appConfig.h_ratio
 
     Item {
         id: startAnimation
-        XAnimator{
+        XAnimator {
             target: root
-            from: 1920
+            from: 1920 * appConfig.w_ratio
             to: 0
             duration: 200
             running: true
@@ -25,9 +25,9 @@ Item {
     }
     MapQuickItem {
         id: marker
-        anchorPoint.x: image.width/4
+        anchorPoint.x: image.width / 4
         anchorPoint.y: image.height
-        coordinate: QtPositioning.coordinate(21.03, 105.78)
+        coordinate: QtPositioning.coordinate(20.996857, 105.8664407)
 
         sourceItem: Image {
             id: image
@@ -38,7 +38,7 @@ Item {
         id: map
         anchors.fill: parent
         plugin: mapPlugin
-        center: QtPositioning.coordinate(21.03, 105.78)
+        center: QtPositioning.coordinate(20.996857, 105.8664407)
         zoomLevel: 14
         copyrightsVisible: false
         Component.onCompleted: {

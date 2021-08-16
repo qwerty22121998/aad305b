@@ -13,6 +13,7 @@ bool XmlReader::ReadXmlFile(QString filePath)
     if (!f.open(QIODevice::ReadOnly ))
     {
         // Error while loading file
+        qDebug() << "error when read file " << filePath << Qt::endl;
         return false;
     }
     // Set data into the QDomDocument before processing
