@@ -4,9 +4,9 @@
     {
       "label": "Qmake",
       "type": "shell",
-      "command": "/home/vuhk/Qt/5.15.2/gcc_64/bin/qmake HomeScreen.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug && /usr/bin/make qmake_all",
+      "command": "/home/vuhk/Qt/5.15.2/gcc_64/bin/qmake ../HomeScreen.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug && /usr/bin/make qmake_all && mv Makefile build/",
       "options": {
-        "cwd": "."
+        "cwd": "build"
       }
     },
     {

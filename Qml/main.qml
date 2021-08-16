@@ -1,6 +1,8 @@
 import QtQuick 2.11
 import QtQuick.Window 2.0
 import QtQuick.Controls 2.4
+import QtMultimedia 5.9
+
 
 ApplicationWindow {
     id: window
@@ -25,7 +27,9 @@ ApplicationWindow {
         id: stackView
         width: parent.width
         anchors.top: statusBar.bottom
-        initialItem: HomeWidget {}
+        initialItem: HomeWidget {
+            id: home
+        }
         onCurrentItemChanged: {
             currentItem.forceActiveFocus()
         }
@@ -37,5 +41,33 @@ ApplicationWindow {
                 easing.type: Easing.OutCubic
             }
         }
+        Keys.onPressed: {
+            switch (event.key) {
+                case Qt.Key_Backspace:
+                    if (statusBar.isShowBackBtn === true)
+                        statusBar.bntBackClicked()
+                    break
+                case Qt.Key_Home:
+                    while (stackView.depth > 1)
+                        stackView.pop()
+                    break
+                case Qt.Key_PageUp:
+                    player.volume += 10
+                    break
+                case Qt.Key_PageDown:
+                    player.volume -= 10
+                    break
+                case Qt.Key_End:
+                    player.mute = !player.mute
+                    break
+                case Qt.Key_Space:
+                    player.state == MediaPlayer.PlayingState ? player.pause() : player.play()
+                    break
+                default:
+                    home.keyboardPress(event)
+            }
+        }
     }
+
+
 }

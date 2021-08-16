@@ -9,8 +9,63 @@ Item {
     width: parent.width
     height: parent.height
     function openApplication(url, prop) {
-        console.log(url, prop)
         parent.push(url, prop)
+    }
+
+    property var focusingItem 
+    property bool focusWidget: true
+    property int focusIdx: 0
+
+    signal triggerHardKey(bool open)
+
+    function focus(item) {
+        if (focusingItem != undefined) {
+            focusingItem.focus = false
+        }
+        focusingItem = item
+        focusingItem.focus = true
+    }
+
+    function checkFocus(item, isWidget, open) {
+        if (isWidget != focusWidget) return false
+        if (item.parent.visualIndex != focusIdx) return false
+        focus(item)
+        if (open) item.click()
+        return true
+    }
+
+    function keyboardPress(event) {
+        console.log("key pressed", event.key)
+        let open = false
+        switch (event.key) {
+            case Qt.Key_Up:
+            case Qt.Key_Down:
+                focusWidget = !focusWidget
+                focusIdx = 0
+                break
+            case Qt.Key_Left:
+                focusIdx--
+                break
+            case Qt.Key_Right:
+                focusIdx++
+                break
+            case Qt.Key_Return:
+                open = true
+                break
+            default:
+                return
+        }
+        if (focusWidget) {
+            focusIdx += 3
+            focusIdx %= 3
+        } else {
+            if (appsModel.rowCount() > 0) {
+                focusIdx += appsModel.rowCount()
+                focusIdx %= appsModel.rowCount()
+            }
+        }
+        console.log("focus widget", focusWidget, "focus id", focusIdx)
+        triggerHardKey(open)
     }
 
     ListView {
@@ -51,7 +106,7 @@ Item {
 
                 onEntered: {
                     visualModelWidget.items.move(drag.source.visualIndex,
-                                                 iconWidget.visualIndex)
+                        iconWidget.visualIndex)
                     iconWidget.item.enabled = false
                 }
                 property int visualIndex: DelegateModel.itemsIndex
@@ -77,12 +132,12 @@ Item {
 
                     sourceComponent: {
                         switch (model.type) {
-                        case "map":
-                            return mapWidget
-                        case "climate":
-                            return climateWidget
-                        case "media":
-                            return mediaWidget
+                            case "map":
+                                return mapWidget
+                            case "climate":
+                                return climateWidget
+                            case "media":
+                                return mediaWidget
                         }
                     }
 
@@ -113,17 +168,39 @@ Item {
         Component {
             id: mapWidget
             MapWidget {
+                id: mapItem
                 onClicked: openApplication("qrc:/App/Map/Map.qml")
+                function onTriggerHardKey(open) {
+                    checkFocus(mapItem, true, open)
+                }
+                Component.onCompleted: {
+                    root.triggerHardKey.connect(onTriggerHardKey)
+                }
             }
         }
         Component {
             id: climateWidget
-            ClimateWidget {}
+            ClimateWidget {
+                id: climateItem
+                function onTriggerHardKey(open) {
+                    checkFocus(climateItem, true, open)
+                }
+                Component.onCompleted: {
+                    root.triggerHardKey.connect(onTriggerHardKey)
+                }
+            }
         }
         Component {
             id: mediaWidget
             MediaWidget {
+                id: mediaItem
                 onClicked: openApplication("qrc:/App/Media/Media.qml")
+                function onTriggerHardKey(open) {
+                    checkFocus(mediaItem, true, open)
+                }
+                Component.onCompleted: {
+                    root.triggerHardKey.connect(onTriggerHardKey)
+                }
             }
         }
     }
@@ -176,9 +253,9 @@ Item {
 
                     onEntered: {
                         visualModel.items.move(drag.source.visualIndex,
-                                               icon.visualIndex)
+                            icon.visualIndex)
                         appsModel.move(drag.source.visualIndex,
-                                       icon.visualIndex)
+                            icon.visualIndex)
                         xmlWriter.saveXml()
                     }
 
@@ -205,11 +282,13 @@ Item {
                             title: model.title
                             icon: model.iconPath
                             onClicked: openApplication(model.url, {
-                                                           "appTitle": model.title,
-                                                           "image": model.iconPath + "_n.png"
-                                                       })
+                                "appTitle": model.title,
+                                "image": model.iconPath + "_n.png"
+                            })
                             drag.axis: Drag.XAndYAxis
                             drag.target: icon
+
+
 
                             onPressAndHold: {
 
@@ -221,11 +300,25 @@ Item {
                                 for (var index = 0; index < visualModel.items.count; index++) {
                                     if (index !== icon.visualIndex)
                                         visualModel.items.get(
-                                                    index).focus = false
+                                            index).focus = false
                                     else
                                         visualModel.items.get(
-                                                    index).focus = true
+                                            index).focus = true
                                 }
+                            }
+
+                            function onTriggerHardKey(open) {
+                                if (root.checkFocus(app, false, open)) {
+                                    lvApps.positionViewAtIndex(icon.visualIndex, ListView.Visible)
+                                }
+                            }
+
+                            Component.onCompleted: {
+                                root.triggerHardKey.connect(onTriggerHardKey)
+                            }
+
+                            Component.onDestruction: {
+                                root.triggerHardKey.disconnect(onTriggerHardKey)
                             }
                         }
 
