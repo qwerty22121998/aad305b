@@ -1,0 +1,21 @@
+@startuml
+skinparam Monochrome true
+start
+:Click Application Icon or Widget;
+
+:Change Application / Widget status to PRESSED;
+
+:Open Application Screen;
+
+repeat
+:User action;
+backward :Handle user action;
+repeat while (User click back) is (no) not (yes)
+
+:Previous screen;
+
+:Change Application / Widget status to FOCUS;
+
+stop
+
+@enduml

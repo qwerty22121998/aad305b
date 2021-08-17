@@ -1,0 +1,26 @@
+@startuml
+skinparam Monochrome true
+|Application|
+start
+:Create ClimateModel;
+
+if (Connect Dbus) then (success)
+:Connect to slot DataChanged;
+else (error)
+end
+endif
+
+|Simulator|
+
+repeat :Data change
+:Notify data change;
+|Application|
+:Read data;
+:Update Climate Data;
+:Bind data to Climate;
+|Simulator|
+repeat while (Wait data)
+
+stop
+
+@enduml

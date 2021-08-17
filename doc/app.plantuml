@@ -1,0 +1,26 @@
+@startuml
+
+skinparam Monochrome true
+
+start
+:Initialize Application;
+split 
+:Load main QML;
+split again
+:Read Data from XML file;
+if (File Exist) then (yes)
+:Parse Data From XML;
+:Fill List of Application to ApplicationModel;
+else (no)
+:Fille empty list of Application to ApplicationModel;
+endif
+end split
+repeat :Bind ListView;
+:Load screen QML;
+backward:Handle user action;
+repeat while(User action)
+
+
+
+stop
+@enduml

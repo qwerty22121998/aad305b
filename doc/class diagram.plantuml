@@ -1,0 +1,107 @@
+@startuml
+
+skinparam monochrome true
+
+class QObject {}
+
+class QAbstractListModel {}
+
+class ApplicationItem {
+  QString m_title
+  QString m_url
+  QString m_iconPath
+
+  QString title()
+  QString url()
+  QString iconPath()
+  QString key()
+}
+
+class ApplicationsModel {
+  QList<ApplicationItem> m_data
+  void move(int from, int to)
+  void addApplication(ApplicationItem &item)
+  ApplicationItem applicationAt(int idx)
+}
+
+ApplicationsModel "extend" --> QAbstractListModel
+' QAbstractListModel "extend" ---> QObject
+
+ApplicationsModel "1" - "n" ApplicationItem
+
+
+class XmlReader {
+  QDomDocument m_xmlDoc
+  bool ReadXmlFile(QString filePath)
+  void PaserXml(ApplicationsModel &model)
+  void saveXml(QList<ApplicationItem> list)
+  QString m_filePath
+}
+
+class XmlWriter {
+  QString m_filePath
+  ApplicationsModel *m_model
+  void BindXml(QString filePath, ApplicationsModel *model)
+  void saveXml()
+}
+
+' XmlWriter "extend" ---> QObject
+
+XmlReader "1" - "1" ApplicationsModel
+
+XmlWriter "1" -- "1" ApplicationsModel
+
+
+class ClimateModel {
+    double GetDriverTemperature()
+    double GetPassengerTemperature()
+    int GetFanLevel()
+    int GetDriverWindMode()
+    int GetPassengerWindMode()
+    int GetAutoMode()
+    int GetSyncMode()
+}
+
+' ClimateModel "extend" ---> QObject
+
+
+class Song {
+  QString title()
+  QString singer()
+  QString source()
+  QString album_art()
+  QString m_title
+    QString m_singer
+    QString m_source
+    QString m_albumArt
+}
+
+class PlaylistModel {
+  enum Roles
+  void addSong(Song &song)
+  QList<Song> m_data
+}
+
+PlaylistModel "1" - "n" Song
+
+QAbstractListModel <--- "extend" PlaylistModel
+
+
+class Player {
+void addToPlaylist(const QList<QUrl> &urls)
+void open();
+    QString getTimeInfo(qint64 currentInfo);
+    QMediaPlayer *m_player
+    QMediaPlaylist *m_playlist
+    PlaylistModel *m_playlistModel
+}
+
+' Player "extend" ---> QObject
+
+Player "1" - "1" PlaylistModel
+
+QObject <--- "extend" ClimateModel
+QObject <--- "extend" Player
+QObject <--- "extend" XmlWriter
+
+@enduml

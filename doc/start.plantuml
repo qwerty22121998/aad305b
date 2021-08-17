@@ -1,0 +1,25 @@
+@startuml
+skinparam Monochrome true
+
+
+
+start
+:Initialize;
+split
+  :Load Application;
+split again
+  :Load Map Widget;
+split again
+  :Load Climate Widget;
+split again
+  :Load Media Widget;
+end split
+
+:Start Application;
+
+
+stop
+
+
+
+@enduml
