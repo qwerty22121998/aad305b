@@ -5,14 +5,14 @@
   <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_map</ICON_PATH>
  </APP>
  <APP ID="1">
-  <TITLE>Settings</TITLE>
-  <URL>qrc:/App/Common/CommonApp.qml</URL>
-  <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_settings</ICON_PATH>
- </APP>
- <APP ID="2">
   <TITLE>Phone</TITLE>
   <URL>qrc:/App/Common/CommonApp.qml</URL>
   <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_phone</ICON_PATH>
+ </APP>
+ <APP ID="2">
+  <TITLE>Settings</TITLE>
+  <URL>qrc:/App/Common/CommonApp.qml</URL>
+  <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_settings</ICON_PATH>
  </APP>
  <APP ID="3">
   <TITLE>Video</TITLE>

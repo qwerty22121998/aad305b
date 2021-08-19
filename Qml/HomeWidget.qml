@@ -12,7 +12,8 @@ Item {
         parent.push(url, prop)
     }
 
-    property var focusingItem 
+    property
+    var focusingItem
     property bool focusWidget: true
     property int focusIdx: 0
 
@@ -30,7 +31,7 @@ Item {
         if (isWidget != focusWidget) return false
         if (item.parent.visualIndex != focusIdx) return false
         focus(item)
-        if (open) item.click()
+        if (open) item.clicked(null)
         return true
     }
 
@@ -169,7 +170,11 @@ Item {
             id: mapWidget
             MapWidget {
                 id: mapItem
-                onClicked: openApplication("qrc:/App/Map/Map.qml")
+                onClicked: {
+                    root.focus(mapItem)
+                    openApplication("qrc:/App/Map/Map.qml")
+                }
+
                 function onTriggerHardKey(open) {
                     checkFocus(mapItem, true, open)
                 }
@@ -194,7 +199,11 @@ Item {
             id: mediaWidget
             MediaWidget {
                 id: mediaItem
-                onClicked: openApplication("qrc:/App/Media/Media.qml")
+                onClicked: {
+                    root.focus(mediaWidget)
+                    openApplication("qrc:/App/Media/Media.qml")
+                }
+
                 function onTriggerHardKey(open) {
                     checkFocus(mediaItem, true, open)
                 }
@@ -281,10 +290,12 @@ Item {
                             anchors.fill: parent
                             title: model.title
                             icon: model.iconPath
-                            onClicked: openApplication(model.url, {
-                                "appTitle": model.title,
-                                "image": model.iconPath + "_n.png"
-                            })
+                            onClicked: {
+                                openApplication(model.url, {
+                                    "appTitle": model.title,
+                                    "image": model.iconPath + "_n.png"
+                                })
+                            }
                             drag.axis: Drag.XAndYAxis
                             drag.target: icon
 
@@ -295,8 +306,7 @@ Item {
                             }
 
                             onReleased: {
-                                app.focus = true
-                                app.state = "Focus"
+                                root.focus(app)
                                 for (var index = 0; index < visualModel.items.count; index++) {
                                     if (index !== icon.visualIndex)
                                         visualModel.items.get(
