@@ -149,7 +149,7 @@ MouseArea {
     }
     Connections {
         target: climateModel
-        onDataChanged: {
+        function onDataChanged() {
             //set data for fan level
             if (climateModel.fan_level < 1) {
                 fan_level.source = "qrc:/Img/HomeScreen/widget_climate_wind_level_01.png"

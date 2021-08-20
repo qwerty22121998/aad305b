@@ -4,6 +4,6 @@ import "../Common"
 Item {
     CommonApp {
         appTitle: "Phone"
-        image: ""
+        image: "qrc:/App/Phone/phone.png"
     }
 }

@@ -191,5 +191,12 @@
         <file>App/Gallery/Gallery.qml</file>
         <file>App/Video/Video.qml</file>
         <file>App/Camera/camera.png</file>
+        <file>App/Radio/radio.jpg</file>
+        <file>App/Setting/setting.png</file>
+        <file>App/Video/video.png</file>
+        <file>App/Phone/phone.png</file>
+        <file>Img/HomeScreen/btn_home_menu_camera_f.png</file>
+        <file>Img/HomeScreen/btn_home_menu_camera_n.png</file>
+        <file>Img/HomeScreen/btn_home_menu_camera_p.png</file>
     </qresource>
 </RCC>

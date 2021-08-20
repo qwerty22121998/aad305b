@@ -18,6 +18,7 @@ Item {
         anchors.top: header.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         height: parent.height - header.height
+        width: parent.width
         source: image
         fillMode: Image.PreserveAspectFit
     }

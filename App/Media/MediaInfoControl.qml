@@ -266,7 +266,7 @@ Item {
 
     Connections {
         target: player.playlist
-        onCurrentIndexChanged: {
+        function onCurrentIndexChanged() {
             album_art_view.currentIndex = index
         }
     }
