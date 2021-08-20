@@ -8,8 +8,8 @@ Item {
     id: root
     width: parent.width
     height: parent.height
-    function openApplication(url) {
-        parent.push(url)
+    function openApplication(url, prop) {
+        parent.push(url, prop)
     }
 
     property var focusingItem
@@ -147,15 +147,14 @@ Item {
                 id: mapItem
 
                 onPressed: {
-                    root.forceFocus(mapItem, true)
+                    root.setFocus(mapItem, true)
                 }
 
                 onReleased: {
-                    root.forceFocus(mapItem, true)
+                    root.setFocus(mapItem, true)
                 }
 
                 onClicked: {
-                    root.forceFocus(mapItem, true)
                     openApplication("qrc:/App/Map/Map.qml")
                 }
 
@@ -174,7 +173,13 @@ Item {
                 id: climateItem
 
                 onPressed: {
-                    root.forceFocus(climateItem, true)
+                    root.setFocus(climateItem, true)
+                }
+
+                onClicked: {
+                    openApplication("qrc:/App/Climate/Climate.qml", {
+                                        "climateModel": climateModel
+                                    })
                 }
 
                 onReleased: {
@@ -195,11 +200,10 @@ Item {
                 id: mediaItem
 
                 onPressed: {
-                    root.forceFocus(mediaItem, true)
+                    root.setFocus(mediaItem, true)
                 }
 
                 onClicked: {
-                    root.forceFocus(mediaItem, true)
                     openApplication("qrc:/App/Media/Media.qml")
                 }
 

@@ -198,5 +198,6 @@
         <file>Img/HomeScreen/btn_home_menu_camera_f.png</file>
         <file>Img/HomeScreen/btn_home_menu_camera_n.png</file>
         <file>Img/HomeScreen/btn_home_menu_camera_p.png</file>
+        <file>App/Climate/Climate.qml</file>
     </qresource>
 </RCC>

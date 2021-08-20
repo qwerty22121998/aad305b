@@ -45,7 +45,7 @@ MouseArea {
         }
     ]
     onPressed: root.state = "Pressed"
-    //    onReleased: onFocusChanged(root.focus)
+    onReleased: root.state = "Focus"
     onFocusChanged: {
         if (root.focus == true)
             root.state = "Focus"

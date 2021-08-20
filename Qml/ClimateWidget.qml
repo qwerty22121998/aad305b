@@ -178,6 +178,7 @@ MouseArea {
                 passenger_temp.text = climateModel.passenger_temp + "°C"
             }
         }
+        Component.onCompleted: onDataChanged()
     }
 
     //Fan
