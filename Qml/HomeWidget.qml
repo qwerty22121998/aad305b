@@ -8,34 +8,42 @@ Item {
     id: root
     width: parent.width
     height: parent.height
-    function openApplication(url, prop) {
-        parent.push(url, prop)
+    function openApplication(url) {
+        parent.push(url)
     }
 
-    property
-    var focusingItem
+    property var focusingItem
     property bool focusWidget: true
     property int focusWidgetIdx: 0
     property int focusAppIdx: 0
 
     signal triggerHardKey(bool open)
 
-    function focus(item) {
+    function focus(item, isWidget) {
         if (focusingItem != undefined) {
             focusingItem.focus = false
         }
         focusingItem = item
         focusingItem.focus = true
+        focusWidget = isWidget
+        if (isWidget) {
+            focusWidgetIdx = item.parent.visualIndex
+        } else {
+            focusAppIdx = item.parent.visualIndex
+        }
     }
 
     function checkFocus(item, isWidget, open) {
-        if (isWidget != focusWidget) return false
+        if (isWidget != focusWidget)
+            return false
 
         let idx = focusWidget ? focusWidgetIdx : focusAppIdx
 
-        if (item.parent.visualIndex != idx) return false
-        focus(item)
-        if (open) item.clicked(null)
+        if (item.parent.visualIndex != idx)
+            return false
+        focus(item, isWidget)
+        if (open)
+            item.clicked(null)
         return true
     }
 
@@ -50,12 +58,14 @@ Item {
         case Qt.Key_Left:
             if (focusWidget)
                 focusWidgetIdx--
-            else focusAppIdx--
+            else
+                focusAppIdx--
             break
         case Qt.Key_Right:
             if (focusWidget)
                 focusWidgetIdx++
-            else focusAppIdx++
+            else
+                focusAppIdx++
             break
         case Qt.Key_Return:
             open = true
@@ -105,25 +115,16 @@ Item {
                 }
             }
 
-            delegate: DropArea {
+            delegate: Item {
                 id: delegateRootWidget
                 width: 635 * appConfig.w_ratio
                 height: 570 * appConfig.h_ratio
-                keys: ["widget"]
 
-                onEntered: {
-                    visualModelWidget.items.move(drag.source.visualIndex,iconWidget.visualIndex)
-                    iconWidget.item.enabled = false
-                }
                 property int visualIndex: DelegateModel.itemsIndex
                 Binding {
                     target: iconWidget
                     property: "visualIndex"
                     value: visualIndex
-                }
-                onExited: iconWidget.item.enabled = true
-                onDropped: {
-                    console.log(drop.source.visualIndex)
                 }
 
                 Loader {
@@ -146,27 +147,6 @@ Item {
                             return mediaWidget
                         }
                     }
-
-                    Drag.active: iconWidget.item.drag.active
-                    Drag.keys: "widget"
-                    Drag.hotSpot.x: delegateRootWidget.width / 2
-                    Drag.hotSpot.y: delegateRootWidget.height / 2
-
-                    states: [
-                        State {
-                            when: iconWidget.Drag.active
-                            ParentChange {
-                                target: iconWidget
-                                parent: root
-                            }
-
-                            AnchorChanges {
-                                target: iconWidget
-                                anchors.horizontalCenter: undefined
-                                anchors.verticalCenter: undefined
-                            }
-                        }
-                    ]
                 }
             }
         }
@@ -175,8 +155,17 @@ Item {
             id: mapWidget
             MapWidget {
                 id: mapItem
+
+                onPressed: {
+                    root.focus(mapItem, true)
+                }
+
+                onReleased: {
+                    root.focus(mapItem, true)
+                }
+
                 onClicked: {
-                    root.focus(mapItem)
+                    root.focus(mapItem, true)
                     openApplication("qrc:/App/Map/Map.qml")
                 }
 
@@ -184,7 +173,7 @@ Item {
                     root.checkFocus(mapItem, true, open)
                 }
                 Component.onCompleted: {
-                    root.focus(mapItem)
+                    root.focus(mapItem, true)
                     root.triggerHardKey.connect(onTriggerHardKey)
                 }
             }
@@ -193,6 +182,15 @@ Item {
             id: climateWidget
             ClimateWidget {
                 id: climateItem
+
+                onPressed: {
+                    root.focus(climateItem, true)
+                }
+
+                onReleased: {
+                    root.focus(climateItem, true)
+                }
+
                 function onTriggerHardKey(open) {
                     root.checkFocus(climateItem, true, open)
                 }
@@ -205,9 +203,18 @@ Item {
             id: mediaWidget
             MediaWidget {
                 id: mediaItem
+
+                onPressed: {
+                    root.focus(mediaItem, true)
+                }
+
                 onClicked: {
-                    root.focus(mediaItem)
+                    root.focus(mediaItem, true)
                     openApplication("qrc:/App/Media/Media.qml")
+                }
+
+                onReleased: {
+                    root.focus(mediaItem, true)
                 }
 
                 function onTriggerHardKey(open) {
@@ -267,10 +274,10 @@ Item {
                     keys: "AppButton"
 
                     onEntered: {
-                        visualModel.items.move(drag.source.visualIndex,
-                                               icon.visualIndex)
-                        appsModel.move(drag.source.visualIndex,
-                                       icon.visualIndex)
+                        let from = drag.source.visualIndex
+                        let to = icon.visualIndex
+                        appsModel.move(from, to)
+                        visualModel.items.move(from, to)
                         xmlWriter.saveXml()
                     }
 
@@ -297,35 +304,25 @@ Item {
                             title: model.title
                             icon: model.iconPath
                             onClicked: {
-                                openApplication(model.url, {
-                                                    "appTitle": model.title,
-                                                    "image": model.iconPath + "_n.png"
-                                                })
+                                root.focus(app, false)
+                                openApplication(model.url)
                             }
                             drag.axis: Drag.XAndYAxis
                             drag.target: icon
 
-
-
-                            onPressAndHold: {
-
+                            onPressed: {
+                                root.focus(app, false)
                             }
 
                             onReleased: {
-                                root.focus(app)
-                                for (var index = 0; index < visualModel.items.count; index++) {
-                                    if (index !== icon.visualIndex)
-                                        visualModel.items.get(
-                                                    index).focus = false
-                                    else
-                                        visualModel.items.get(
-                                                    index).focus = true
-                                }
+                                root.focus(app, false)
                             }
 
                             function onTriggerHardKey(open) {
                                 if (root.checkFocus(app, false, open)) {
-                                    lvApps.positionViewAtIndex(icon.visualIndex, ListView.Visible)
+                                    lvApps.positionViewAtIndex(
+                                                icon.visualIndex,
+                                                ListView.Visible)
                                 }
                             }
 

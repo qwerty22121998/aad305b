@@ -68,7 +68,7 @@ Drawer {
 
     Connections {
         target: player.playlist
-        onCurrentIndexChanged: {
+        function onCurrentIndexChanged() {
             mediaPlaylist.currentIndex = index
         }
     }

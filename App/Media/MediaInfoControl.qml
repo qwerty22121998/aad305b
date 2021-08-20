@@ -229,7 +229,7 @@ Item {
         }
         Connections {
             target: player
-            onStateChanged: {
+            function onStateChanged() {
                 play.source = player.state == MediaPlayer.PlayingState ? "qrc:/App/Media/Image/pause.png" : "qrc:/App/Media/Image/play.png"
             }
         }

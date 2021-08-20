@@ -39,6 +39,7 @@ class ApplicationsModel : public QAbstractListModel {
 
  private:
   QList<ApplicationItem> m_data;
+  QList<ApplicationItem> copy_data;
 };
 
 #endif  // APPLICATIONSMODEL_H

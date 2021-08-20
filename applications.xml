@@ -5,24 +5,24 @@
   <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_media</ICON_PATH>
  </APP>
  <APP ID="1">
-  <TITLE>Settings</TITLE>
-  <URL>qrc:/App/Setting/Setting.qml</URL>
-  <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_settings</ICON_PATH>
- </APP>
- <APP ID="2">
-  <TITLE>Video</TITLE>
-  <URL>qrc:/App/Video/Video.qml</URL>
-  <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_climate</ICON_PATH>
- </APP>
- <APP ID="3">
   <TITLE>Map</TITLE>
   <URL>qrc:/App/Map/Map.qml</URL>
   <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_map</ICON_PATH>
  </APP>
- <APP ID="4">
+ <APP ID="2">
+  <TITLE>Settings</TITLE>
+  <URL>qrc:/App/Setting/Setting.qml</URL>
+  <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_settings</ICON_PATH>
+ </APP>
+ <APP ID="3">
   <TITLE>Phone</TITLE>
   <URL>qrc:/App/Phone/Phone.qml</URL>
   <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_phone</ICON_PATH>
+ </APP>
+ <APP ID="4">
+  <TITLE>Video</TITLE>
+  <URL>qrc:/App/Video/Video.qml</URL>
+  <ICON_PATH>qrc:/Img/HomeScreen/btn_home_menu_climate</ICON_PATH>
  </APP>
  <APP ID="5">
   <TITLE>Radio</TITLE>

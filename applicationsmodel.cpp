@@ -37,6 +37,7 @@ QVariant ApplicationsModel::data(const QModelIndex &index, int role) const {
 void ApplicationsModel::addApplication(ApplicationItem &item) {
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
   m_data << item;
+  copy_data << item;
   endInsertRows();
 }
 
@@ -49,7 +50,7 @@ QHash<int, QByteArray> ApplicationsModel::roleNames() const {
 }
 
 ApplicationItem ApplicationsModel::applicationAt(int idx) {
-  return m_data.at(idx);
+  return copy_data.at(idx);
 }
 
-void ApplicationsModel::move(int from, int to) { m_data.move(from, to); }
+void ApplicationsModel::move(int from, int to) { copy_data.move(from, to); }
