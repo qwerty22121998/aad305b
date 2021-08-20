@@ -19,32 +19,36 @@ Item {
 
     signal triggerHardKey(bool open)
 
-    function focus(item, isWidget) {
-        let section = isWidget ? 0 : 1
-
-        if (focusingItem != undefined) {
+    function setFocus(item, isWidget) {
+        if (focusingItem != undefined && focusingItem != item) {
             focusingItem.focus = false
+            focusingItem.state = "Normal"
         }
+        let section = isWidget ? 0 : 1
         focusingItem = item
-        focusingItem.focus = true
         focusSection = section
         focustIndex[section] = item.parent.visualIndex
     }
 
-    function checkFocus(item, isWidget, open) {
+    function forceFocus(item, isWidget) {
+        setFocus(item, isWidget)
+        item.focus = true
+        item.state = "Focus"
+    }
+
+    function triggerFocus(item, isWidget, open) {
         let section = isWidget ? 0 : 1
         if (section != focusSection)
             return false
         if (item.parent.visualIndex != focustIndex[section])
             return false
-        focus(item, isWidget)
+        forceFocus(item, isWidget)
         if (open)
             item.clicked(null)
         return true
     }
 
     function keyboardPress(event) {
-        console.log("key pressed", event.key)
         let open = false
         let len = focustModel[focusSection].model.rowCount()
         switch (event.key) {
@@ -54,16 +58,12 @@ Item {
             focusSection %= 2
             break
         case Qt.Key_Left:
-
             focustIndex[focusSection] += len - 1
             focustIndex[focusSection] %= len
-
             break
         case Qt.Key_Right:
-
             focustIndex[focusSection]++
             focustIndex[focusSection] %= len
-
             break
         case Qt.Key_Return:
             open = true
@@ -147,23 +147,23 @@ Item {
                 id: mapItem
 
                 onPressed: {
-                    root.focus(mapItem, true)
+                    root.forceFocus(mapItem, true)
                 }
 
                 onReleased: {
-                    root.focus(mapItem, true)
+                    root.forceFocus(mapItem, true)
                 }
 
                 onClicked: {
-                    root.focus(mapItem, true)
+                    root.forceFocus(mapItem, true)
                     openApplication("qrc:/App/Map/Map.qml")
                 }
 
                 function onTriggerHardKey(open) {
-                    root.checkFocus(mapItem, true, open)
+                    root.triggerFocus(mapItem, true, open)
                 }
                 Component.onCompleted: {
-                    root.focus(mapItem, true)
+                    root.forceFocus(mapItem, true)
                     root.triggerHardKey.connect(onTriggerHardKey)
                 }
             }
@@ -174,15 +174,15 @@ Item {
                 id: climateItem
 
                 onPressed: {
-                    root.focus(climateItem, true)
+                    root.forceFocus(climateItem, true)
                 }
 
                 onReleased: {
-                    root.focus(climateItem, true)
+                    root.forceFocus(climateItem, true)
                 }
 
                 function onTriggerHardKey(open) {
-                    root.checkFocus(climateItem, true, open)
+                    root.triggerFocus(climateItem, true, open)
                 }
                 Component.onCompleted: {
                     root.triggerHardKey.connect(onTriggerHardKey)
@@ -195,20 +195,20 @@ Item {
                 id: mediaItem
 
                 onPressed: {
-                    root.focus(mediaItem, true)
+                    root.forceFocus(mediaItem, true)
                 }
 
                 onClicked: {
-                    root.focus(mediaItem, true)
+                    root.forceFocus(mediaItem, true)
                     openApplication("qrc:/App/Media/Media.qml")
                 }
 
                 onReleased: {
-                    root.focus(mediaItem, true)
+                    root.forceFocus(mediaItem, true)
                 }
 
                 function onTriggerHardKey(open) {
-                    root.checkFocus(mediaItem, true, open)
+                    root.triggerFocus(mediaItem, true, open)
                 }
                 Component.onCompleted: {
                     root.triggerHardKey.connect(onTriggerHardKey)
@@ -268,7 +268,12 @@ Item {
                         let to = icon.visualIndex
                         appsModel.move(from, to)
                         visualModel.items.move(from, to)
+
                         xmlWriter.saveXml()
+                    }
+
+                    onDropped: {
+
                     }
 
                     property int visualIndex: DelegateModel.itemsIndex
@@ -294,22 +299,22 @@ Item {
                             title: model.title
                             icon: model.iconPath
                             onClicked: {
-                                root.focus(app, false)
+                                root.forceFocus(app, false)
                                 openApplication(model.url)
                             }
                             drag.axis: Drag.XAndYAxis
                             drag.target: icon
 
                             onPressed: {
-                                root.focus(app, false)
+                                root.setFocus(app, false)
                             }
 
                             onReleased: {
-                                root.focus(app, false)
+                                root.setFocus(app, false)
                             }
 
                             function onTriggerHardKey(open) {
-                                if (root.checkFocus(app, false, open)) {
+                                if (root.triggerFocus(app, false, open)) {
                                     lvApps.positionViewAtIndex(
                                                 icon.visualIndex,
                                                 ListView.Visible)
@@ -319,14 +324,9 @@ Item {
                             Component.onCompleted: {
                                 root.triggerHardKey.connect(onTriggerHardKey)
                             }
-
-                            Component.onDestruction: {
-                                root.triggerHardKey.disconnect(onTriggerHardKey)
-                            }
                         }
 
-                        onFocusChanged: app.focus = icon.focus
-
+                        onFocusChanged: icon.focus = app.focus
                         Drag.active: app.drag.active
                         Drag.hotSpot.x: delegateRoot.width / 2
                         Drag.hotSpot.y: delegateRoot.height / 2
