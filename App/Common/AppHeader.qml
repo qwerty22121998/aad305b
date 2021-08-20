@@ -5,7 +5,7 @@ Item {
     Image {
         id: headerItem
         source: "qrc:/App/Media/Image/title.png"
-        height: implicitHeight / 2
+        height: parent.height
         Text {
             id: headerTitleText
             text: title

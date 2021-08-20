@@ -43,25 +43,25 @@ Item {
         console.log("key pressed", event.key)
         let open = false
         switch (event.key) {
-            case Qt.Key_Up:
-            case Qt.Key_Down:
-                focusWidget = !focusWidget
-                break
-            case Qt.Key_Left:
-                if (focusWidget)
-                    focusWidgetIdx--
-                else focusAppIdx--
-                break
-            case Qt.Key_Right:
-                if (focusWidget)
-                    focusWidgetIdx++
-                else focusAppIdx++
-                break
-            case Qt.Key_Return:
-                open = true
-                break
-            default:
-                return
+        case Qt.Key_Up:
+        case Qt.Key_Down:
+            focusWidget = !focusWidget
+            break
+        case Qt.Key_Left:
+            if (focusWidget)
+                focusWidgetIdx--
+            else focusAppIdx--
+            break
+        case Qt.Key_Right:
+            if (focusWidget)
+                focusWidgetIdx++
+            else focusAppIdx++
+            break
+        case Qt.Key_Return:
+            open = true
+            break
+        default:
+            return
         }
 
         focusWidgetIdx += 3
@@ -112,8 +112,7 @@ Item {
                 keys: ["widget"]
 
                 onEntered: {
-                    visualModelWidget.items.move(drag.source.visualIndex,
-                        iconWidget.visualIndex)
+                    visualModelWidget.items.move(drag.source.visualIndex,iconWidget.visualIndex)
                     iconWidget.item.enabled = false
                 }
                 property int visualIndex: DelegateModel.itemsIndex
@@ -139,12 +138,12 @@ Item {
 
                     sourceComponent: {
                         switch (model.type) {
-                            case "map":
-                                return mapWidget
-                            case "climate":
-                                return climateWidget
-                            case "media":
-                                return mediaWidget
+                        case "map":
+                            return mapWidget
+                        case "climate":
+                            return climateWidget
+                        case "media":
+                            return mediaWidget
                         }
                     }
 
@@ -269,9 +268,9 @@ Item {
 
                     onEntered: {
                         visualModel.items.move(drag.source.visualIndex,
-                            icon.visualIndex)
+                                               icon.visualIndex)
                         appsModel.move(drag.source.visualIndex,
-                            icon.visualIndex)
+                                       icon.visualIndex)
                         xmlWriter.saveXml()
                     }
 
@@ -299,9 +298,9 @@ Item {
                             icon: model.iconPath
                             onClicked: {
                                 openApplication(model.url, {
-                                    "appTitle": model.title,
-                                    "image": model.iconPath + "_n.png"
-                                })
+                                                    "appTitle": model.title,
+                                                    "image": model.iconPath + "_n.png"
+                                                })
                             }
                             drag.axis: Drag.XAndYAxis
                             drag.target: icon
@@ -317,10 +316,10 @@ Item {
                                 for (var index = 0; index < visualModel.items.count; index++) {
                                     if (index !== icon.visualIndex)
                                         visualModel.items.get(
-                                            index).focus = false
+                                                    index).focus = false
                                     else
                                         visualModel.items.get(
-                                            index).focus = true
+                                                    index).focus = true
                                 }
                             }
 

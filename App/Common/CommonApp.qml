@@ -7,7 +7,7 @@ Item {
     property string appTitle: ""
     property string image: ""
     AppHeader {
-        id: headerItem
+        id: header
         width: parent.width
         anchors.top: parent.top
         height: 70 * appConfig.h_ratio
@@ -15,9 +15,9 @@ Item {
     }
     Image {
         id: settingScr
-        anchors.top: headerItem.bottom
+        anchors.top: header.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        height: parent.height - headerItem.height
+        height: parent.height - header.height
         source: image
         fillMode: Image.PreserveAspectFit
     }
