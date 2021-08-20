@@ -15,7 +15,8 @@ Item {
     property
     var focusingItem
     property bool focusWidget: true
-    property int focusIdx: 0
+    property int focusWidgetIdx: 0
+    property int focusAppIdx: 0
 
     signal triggerHardKey(bool open)
 
@@ -29,7 +30,10 @@ Item {
 
     function checkFocus(item, isWidget, open) {
         if (isWidget != focusWidget) return false
-        if (item.parent.visualIndex != focusIdx) return false
+
+        let idx = focusWidget ? focusWidgetIdx : focusAppIdx
+
+        if (item.parent.visualIndex != idx) return false
         focus(item)
         if (open) item.clicked(null)
         return true
@@ -42,13 +46,16 @@ Item {
             case Qt.Key_Up:
             case Qt.Key_Down:
                 focusWidget = !focusWidget
-                focusIdx = 0
                 break
             case Qt.Key_Left:
-                focusIdx--
+                if (focusWidget)
+                    focusWidgetIdx--
+                else focusAppIdx--
                 break
             case Qt.Key_Right:
-                focusIdx++
+                if (focusWidget)
+                    focusWidgetIdx++
+                else focusAppIdx++
                 break
             case Qt.Key_Return:
                 open = true
@@ -56,16 +63,15 @@ Item {
             default:
                 return
         }
-        if (focusWidget) {
-            focusIdx += 3
-            focusIdx %= 3
-        } else {
-            if (appsModel.rowCount() > 0) {
-                focusIdx += appsModel.rowCount()
-                focusIdx %= appsModel.rowCount()
-            }
-        }
-        console.log("focus widget", focusWidget, "focus id", focusIdx)
+
+        focusWidgetIdx += 3
+        focusWidgetIdx %= 3
+
+        let appCnt = appsModel.rowCount()
+
+        focusAppIdx += appCnt
+        focusAppIdx %= appCnt
+
         triggerHardKey(open)
     }
 
@@ -176,9 +182,10 @@ Item {
                 }
 
                 function onTriggerHardKey(open) {
-                    checkFocus(mapItem, true, open)
+                    root.checkFocus(mapItem, true, open)
                 }
                 Component.onCompleted: {
+                    root.focus(mapItem)
                     root.triggerHardKey.connect(onTriggerHardKey)
                 }
             }
@@ -188,7 +195,7 @@ Item {
             ClimateWidget {
                 id: climateItem
                 function onTriggerHardKey(open) {
-                    checkFocus(climateItem, true, open)
+                    root.checkFocus(climateItem, true, open)
                 }
                 Component.onCompleted: {
                     root.triggerHardKey.connect(onTriggerHardKey)
@@ -200,12 +207,12 @@ Item {
             MediaWidget {
                 id: mediaItem
                 onClicked: {
-                    root.focus(mediaWidget)
+                    root.focus(mediaItem)
                     openApplication("qrc:/App/Media/Media.qml")
                 }
 
                 function onTriggerHardKey(open) {
-                    checkFocus(mediaItem, true, open)
+                    root.checkFocus(mediaItem, true, open)
                 }
                 Component.onCompleted: {
                     root.triggerHardKey.connect(onTriggerHardKey)

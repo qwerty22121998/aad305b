@@ -143,6 +143,7 @@
         <file>Qml/MapWidget.qml</file>
         <file>Qml/MediaWidget.qml</file>
         <file>Qml/StatusBar.qml</file>
+        <file>App/Setting/Setting.qml</file>
         <file>App/Media/Image/album_art.png</file>
         <file>App/Media/Image/back.png</file>
         <file>App/Media/Image/background.png</file>
@@ -184,5 +185,11 @@
         <file>App/Media/SwitchButton.qml</file>
         <file>App/Common/CommonApp.qml</file>
         <file>App/Common/AppHeader.qml</file>
+        <file>App/Radio/Radio.qml</file>
+        <file>App/Phone/Phone.qml</file>
+        <file>App/Camera/Camera.qml</file>
+        <file>App/Gallery/Gallery.qml</file>
+        <file>App/Video/Video.qml</file>
+        <file>App/Camera/camera.png</file>
     </qresource>
 </RCC>
