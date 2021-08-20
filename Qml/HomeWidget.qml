@@ -13,33 +13,29 @@ Item {
     }
 
     property var focusingItem
-    property bool focusWidget: true
-    property int focusWidgetIdx: 0
-    property int focusAppIdx: 0
+    property var focustModel: [visualModelWidget, visualModel]
+    property var focustIndex: [0, 0]
+    property int focusSection: 0
 
     signal triggerHardKey(bool open)
 
     function focus(item, isWidget) {
+        let section = isWidget ? 0 : 1
+
         if (focusingItem != undefined) {
             focusingItem.focus = false
         }
         focusingItem = item
         focusingItem.focus = true
-        focusWidget = isWidget
-        if (isWidget) {
-            focusWidgetIdx = item.parent.visualIndex
-        } else {
-            focusAppIdx = item.parent.visualIndex
-        }
+        focusSection = section
+        focustIndex[section] = item.parent.visualIndex
     }
 
     function checkFocus(item, isWidget, open) {
-        if (isWidget != focusWidget)
+        let section = isWidget ? 0 : 1
+        if (section != focusSection)
             return false
-
-        let idx = focusWidget ? focusWidgetIdx : focusAppIdx
-
-        if (item.parent.visualIndex != idx)
+        if (item.parent.visualIndex != focustIndex[section])
             return false
         focus(item, isWidget)
         if (open)
@@ -50,22 +46,24 @@ Item {
     function keyboardPress(event) {
         console.log("key pressed", event.key)
         let open = false
+        let len = focustModel[focusSection].model.rowCount()
         switch (event.key) {
         case Qt.Key_Up:
         case Qt.Key_Down:
-            focusWidget = !focusWidget
+            focusSection++
+            focusSection %= 2
             break
         case Qt.Key_Left:
-            if (focusWidget)
-                focusWidgetIdx--
-            else
-                focusAppIdx--
+
+            focustIndex[focusSection] += len - 1
+            focustIndex[focusSection] %= len
+
             break
         case Qt.Key_Right:
-            if (focusWidget)
-                focusWidgetIdx++
-            else
-                focusAppIdx++
+
+            focustIndex[focusSection]++
+            focustIndex[focusSection] %= len
+
             break
         case Qt.Key_Return:
             open = true
@@ -73,14 +71,6 @@ Item {
         default:
             return
         }
-
-        focusWidgetIdx += 3
-        focusWidgetIdx %= 3
-
-        let appCnt = appsModel.rowCount()
-
-        focusAppIdx += appCnt
-        focusAppIdx %= appCnt
 
         triggerHardKey(open)
     }
