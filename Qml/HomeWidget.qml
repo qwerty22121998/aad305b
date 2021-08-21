@@ -66,7 +66,8 @@ Item {
             focustIndex[focusSection] %= len
             break
         case Qt.Key_Return:
-            open = true
+            if (stackView.depth == 1)
+                open = true
             break
         default:
             return
